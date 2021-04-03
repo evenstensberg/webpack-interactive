@@ -40,17 +40,23 @@ const PAUSE_KEY = 'p';
 
 const {webpack} = require('webpack');
 const compilation = webpack({
-    entry: './test.js'
+    entry: {
+        main: './test.js',
+        other: './plugin.js'
+    }
 })
 
-const state = [compilation];
+let state = {
+    mainEnterAvailable: true,
+    isMainMenu: true
+}
 
 const writeFilterConsole = (stats) => {
         const latestCompilation = stats;
         const data = [];
 
         for (let i = 0; i < latestCompilation.chunks.length; i++) {
-            const name = latestCompilation.chunks[i].id;
+            const name = latestCompilation.chunks[i].names[0];
             const chunksArr = [];
             for (let j = 0; j < latestCompilation.chunks[i].modules.length; j++) {
                 const size = latestCompilation.chunks[i].modules[j].size;
@@ -78,7 +84,7 @@ const interactiveConfig = [
         description: 'Analyze build for performance improvements',
         onShowMore: {
             action: async () => {
-                const stateCompilation = state.pop();
+                const stateCompilation = compilation;
                 const bundleAnalyzer = require('webpack-bundle-analyzer');
                 stateCompilation.run((err, stats) => {
                     bundleAnalyzer.start(stats.toJson());
@@ -91,7 +97,7 @@ const interactiveConfig = [
         description: 'Pause compilation at a given time',
         onShowMore: {
             action: () => {
-                const stateCompilation = state.pop();
+                const stateCompilation = compilation;
                 stateCompilation.run((err, stats) => {
                     console.log(stats.toJson());
                 })
@@ -103,9 +109,10 @@ const interactiveConfig = [
         description: 'Filter a module and get stats on why a module was included',
         onShowMore: {
             action: () => {
-                const stateCompilation = state.pop();
+                const stateCompilation = compilation;
                 stateCompilation.run((err, stats) => {
                     writeFilterConsole(stats.toJson())
+                    state.mainEnterAvailable = false;
                 })
             },
         },
@@ -115,7 +122,7 @@ const interactiveConfig = [
         description: 'Run webpack',
         onShowMore: {
             action: () => {
-                const stateCompilation = state.pop();
+                const stateCompilation = compilation;
                 stateCompilation.run((err, stats) => {
                     console.log(stats.toString())
                 })
@@ -161,7 +168,13 @@ async function run(config, outputOptions) {
                 break;
             case 'return':
                 // TODO: get line and do stuff
+                if(state.mainEnterAvailable) {
+                    interactiveConfig[3].onShowMore.action()
+                }
                 break;
+            case 'backspace': 
+                state.isMainMenu = true;
+                setupInteractive()
             default:
                 break;
         }
