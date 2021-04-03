@@ -31,9 +31,22 @@ const informActions = () => {
     console.log('You can now analyze your build, press c to continue...\n');
 };
 
-/* const writeFilterConsole = () => {
-    if (state.length) {
-        const latestCompilation = state[state.length - 1];
+const EXIT_KEY = 'q';
+const ANALYZE_KEY = 'a';
+const FILTER_KEY = 'm';
+const ENTER_KEY = '\n';
+const PAUSE_KEY = 'p';
+
+
+const {webpack} = require('webpack');
+const compilation = webpack({
+    entry: './test.js'
+})
+
+const state = [compilation];
+
+const writeFilterConsole = (stats) => {
+        const latestCompilation = stats;
         const data = [];
 
         for (let i = 0; i < latestCompilation.chunks.length; i++) {
@@ -57,23 +70,8 @@ const informActions = () => {
             });
         });
         process.stdout.write(ansiEscapes.cursorTo(0, 1));
-    }
-}; */
+};
 
-
-const EXIT_KEY = 'q';
-const ANALYZE_KEY = 'a';
-const FILTER_KEY = 'm';
-const ENTER_KEY = '\n';
-const PAUSE_KEY = 'p';
-
-
-const {webpack} = require('webpack');
-const compilation = webpack({
-    entry: './test.js'
-})
-
-const state = [compilation];
 const interactiveConfig = [
     {
         key: ANALYZE_KEY,
@@ -92,7 +90,12 @@ const interactiveConfig = [
         key: PAUSE_KEY,
         description: 'Pause compilation at a given time',
         onShowMore: {
-            action: () => {},
+            action: () => {
+                const stateCompilation = state.pop();
+                stateCompilation.run((err, stats) => {
+                    console.log(stats.toJson());
+                })
+            },
         },
     },
     {
@@ -100,8 +103,9 @@ const interactiveConfig = [
         description: 'Filter a module and get stats on why a module was included',
         onShowMore: {
             action: () => {
+                const stateCompilation = state.pop();
                 stateCompilation.run((err, stats) => {
-                    console.log(stats.toJson());
+                    writeFilterConsole(stats.toJson())
                 })
             },
         },
@@ -111,6 +115,7 @@ const interactiveConfig = [
         description: 'Run webpack',
         onShowMore: {
             action: () => {
+                const stateCompilation = state.pop();
                 stateCompilation.run((err, stats) => {
                     console.log(stats.toString())
                 })
