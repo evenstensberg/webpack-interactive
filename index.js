@@ -99,14 +99,22 @@ const interactiveConfig = [
         key: FILTER_KEY,
         description: 'Filter a module and get stats on why a module was included',
         onShowMore: {
-            action: () => {},
+            action: () => {
+                stateCompilation.run((err, stats) => {
+                    console.log(stats.toJson());
+                })
+            },
         },
     },
     {
         key: ENTER_KEY,
         description: 'Run webpack',
         onShowMore: {
-            action: () => {},
+            action: () => {
+                stateCompilation.run((err, stats) => {
+                    console.log(stats.toString())
+                })
+            },
         },
     },
     {
