@@ -81,8 +81,9 @@ const interactiveConfig = [
         onShowMore: {
             action: async () => {
                 const stateCompilation = state.pop();
+                const bundleAnalyzer = require('webpack-bundle-analyzer');
                 stateCompilation.run((err, stats) => {
-                    console.log(stats.toString())
+                    bundleAnalyzer.start(stats.toJson());
                 })
             },
         },
