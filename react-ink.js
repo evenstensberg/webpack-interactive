@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { render, measureElement, Box, Text } from 'ink';
+import { render, measureElement, Box, Text, useStdin, useStdout, useFocusManager } from 'ink';
 
 
 const EXIT_KEY = 'q';
@@ -30,12 +30,21 @@ const interactiveConfig = [
         description: 'Exit interactive mode',
     },
 ];
+
 const Counter = () => {
     const ref = useRef();
+    const {setRawMode} = useStdin();
+    const {write} = useStdout();
+    const {enableFocus} = useFocusManager();
 
     useEffect(() => {
         const { width, height } = measureElement(ref.current);
         // width = 100, height = 1
+        setRawMode(true);
+        enableFocus();
+		return () => {
+			setRawMode(false);
+		};
     }, []);
     return (
         <Box width={100}>
