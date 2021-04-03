@@ -12,7 +12,16 @@
   "dependencies": {
     "ansi-escapes": "^4.3.2",
     "colorette": "^1.2.2",
+    "ink": "^3.0.8",
+    "react": "^16.14.0",
     "webpack": "^5.30.0",
     "webpack-bundle-analyzer": "^4.4.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.13.14",
+    "@babel/core": "^7.13.14",
+    "@babel/preset-env": "^7.13.12",
+    "@babel/preset-react": "^7.13.13",
+    "@babel/register": "^7.13.14"
   }
 }

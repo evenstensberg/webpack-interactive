@@ -3,6 +3,7 @@
 const { gray, bold, white, cyan, yellow } = require('colorette');
 const ansiEscapes = require('ansi-escapes');
 const readline = require('readline');
+const fs = require('fs');
 
 const generateSingleOption = (option) => {
     const { key, description } = option;
@@ -50,6 +51,7 @@ let state = {
     mainEnterAvailable: true,
     isMainMenu: true
 }
+
 
 const writeFilterConsole = (stats) => {
         const latestCompilation = stats;
@@ -167,7 +169,7 @@ async function run(config, outputOptions) {
                 process.stdout.write(ansiEscapes.cursorPrevLine);
                 break;
             case 'return':
-                // TODO: get line and do stuff
+                console.log(ansiEscapes)
                 if(state.mainEnterAvailable) {
                     interactiveConfig[3].onShowMore.action()
                 }
