@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { render, measureElement, Box, Text, useStdin, useStdout, useFocusManager } from 'ink';
+import { render, measureElement, Box, Text, useStdin, useStdout, useFocusManager, useInput } from 'ink';
 
 
 const EXIT_KEY = 'q';
@@ -36,7 +36,9 @@ const Counter = () => {
     const {setRawMode} = useStdin();
     const {write} = useStdout();
     const {enableFocus} = useFocusManager();
-
+    const [state, setState] = useState({
+        index: 0
+    })
     useEffect(() => {
         const { width, height } = measureElement(ref.current);
         // width = 100, height = 1
@@ -46,6 +48,30 @@ const Counter = () => {
 			setRawMode(false);
 		};
     }, []);
+
+    useInput((input, key) => {
+		if (input === 'q') {
+			// Exit program
+            console.clear();
+            process.exit(0);
+		}
+
+		if (key.downArrow) {
+			// Left arrow key pressed
+            const newState = state.index === 4 ? 0 : state.index + 1;
+            setState({
+                index: newState
+            })
+		}
+        if (key.upArrow) {
+			// Left arrow key pressed
+            const newState = state.index === 0 ? 4 : state.index - 1;
+            setState({
+                index: newState
+            })
+		}
+	});
+
     return (
         <Box width={100}>
             <Box flexDirection="column" ref={ref} marginLeft={2}>
