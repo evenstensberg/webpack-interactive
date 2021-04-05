@@ -33,9 +33,9 @@ const interactiveConfig = [
 
 const Counter = () => {
     const ref = useRef();
-    const {setRawMode} = useStdin();
-    const {write} = useStdout();
-    const {enableFocus} = useFocusManager();
+    const { setRawMode } = useStdin();
+    const { write } = useStdout();
+    const { enableFocus } = useFocusManager();
     const [state, setState] = useState({
         index: 0
     })
@@ -44,23 +44,33 @@ const Counter = () => {
         // width = 100, height = 1
         setRawMode(true);
         enableFocus();
-		return () => {
-			setRawMode(false);
-		};
+        return () => {
+            setRawMode(false);
+        };
     }, []);
 
     useInput((input, key) => {
-		if (input === 'q') {
-			// Exit program
+        if (input === 'q') {
+            // Exit program
             console.clear();
             process.exit(0);
-		}
+        }
         interactiveConfig.forEach(prop => {
-            if(prop.key === input) {
-                console.log("HEY")
+            if (prop.key === input) {
+                if (input === ENTER_KEY) {
+
+                }
+                else if (input === ANALYZE_KEY) {
+
+                }
+                else if (input === FILTER_KEY) {
+
+                } else if (input === PAUSE_KEY) {
+
+                }
             }
         })
-	});
+    });
 
     return (
         <Box width={100}>
@@ -71,9 +81,9 @@ const Counter = () => {
                         <Text color="gray" height={2} marginLeft={5} marginRight={2}>> Press </Text>
                         <Text color="#FF4500">{prop.key} </Text>
                         <Text color="gray">{prop.description}</Text>
-                        </Box>
-                        );
-        
+                    </Box>
+                    );
+
                 })}
             </Box>
         </Box>
