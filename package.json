@@ -1,13 +1,16 @@
 {
   "name": "webpack-interactive",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "webpack Interactive to run webpack interactively",
+  "main": "webpack-interactive.js",
+  "bin": {
+    "interactive": "node ./webpack-interactive.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["webpack", "interactive", "cli", "bundler"],
+  "author": "Even Stensberg <evenstensberg@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "ansi-escapes": "^4.3.2",
@@ -16,9 +19,7 @@
     "ink-select-input": "^4.2.0",
     "react": "^16.14.0",
     "webpack": "^5.30.0",
-    "webpack-bundle-analyzer": "^4.4.0"
-  },
-  "devDependencies": {
+    "webpack-bundle-analyzer": "^4.4.0",
     "@babel/cli": "^7.13.14",
     "@babel/core": "^7.13.14",
     "@babel/preset-env": "^7.13.12",

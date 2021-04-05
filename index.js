@@ -1,4 +1,3 @@
-import { cyan, yellow, bold } from 'colorette';
 import React, { useState, useEffect, useRef } from 'react';
 import { render, measureElement, Box, Text, useStdin, useStdout, useFocusManager, useInput } from 'ink';
 import SelectInput from 'ink-select-input';
@@ -189,7 +188,7 @@ const Counter = () => {
         state.modules.forEach((chunk) => {
             let data;
             data = Object.keys(chunk).forEach((mod) => {
-                let path = chunk[mod].forEach((sub) => {
+                chunk[mod].forEach((sub) => {
                     const path = mod + ' > ' + sub.path;
                     map.push({ value: path.toUpperCase(), label: path, data: {
                         issuerPath: sub.issuerPath,
