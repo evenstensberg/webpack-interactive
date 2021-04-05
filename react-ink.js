@@ -38,6 +38,33 @@ const interactiveConfig = [
     },
 ];
 
+const writeFilterConsole = (stats) => {
+    const latestCompilation = stats;
+    const data = [];
+
+    for (let i = 0; i < latestCompilation.chunks.length; i++) {
+        const name = latestCompilation.chunks[i].names[0];
+        const chunksArr = [];
+        for (let j = 0; j < latestCompilation.chunks[i].modules.length; j++) {
+            const size = latestCompilation.chunks[i].modules[j].size;
+            const path = latestCompilation.chunks[i].modules[j].name.replace('./', '');
+            const issuerPath = latestCompilation.chunks[i].modules[j].issuerPath;
+            chunksArr.push({ path, size, issuerPath });
+        }
+        data.push({ [name]: chunksArr });
+    }
+    console.clear();
+    data.forEach((chunk) => {
+        Object.keys(chunk).forEach((mod) => {
+            console.log(bold(cyan(mod)));
+            chunk[mod].forEach((sub) => {
+                console.log('> ', yellow(sub.path));
+            });
+        });
+    });
+    process.stdout.write(ansiEscapes.cursorTo(0, 1));
+};
+
 const Counter = () => {
     const ref = useRef();
     const { setRawMode } = useStdin();
