@@ -5,8 +5,11 @@ import { render, measureElement, Box, Text, useStdin, useStdout, useFocusManager
 const EXIT_KEY = 'q';
 const ANALYZE_KEY = 'a';
 const FILTER_KEY = 'm';
-const ENTER_KEY = 'Enter';
+const ENTER_KEY = 'return';
 const PAUSE_KEY = 'p';
+const CONTINUE_KEY = 'c';
+
+const { spawn } = require('child_process');
 
 const interactiveConfig = [
     {
@@ -16,6 +19,10 @@ const interactiveConfig = [
     {
         key: PAUSE_KEY,
         description: 'Pause compilation at a given time',
+    },
+    {
+        key: CONTINUE_KEY,
+        description: 'Continue a compilation'
     },
     {
         key: FILTER_KEY,
@@ -56,17 +63,34 @@ const Counter = () => {
             process.exit(0);
         }
         interactiveConfig.forEach(prop => {
-            if (prop.key === input) {
-                if (input === ENTER_KEY) {
+            if (prop.key === input || key.return) {
+                let webpackProc;
+                if (key.return) {
+                    webpackProc = spawn("webpack", ['--profile', '--json', 'stats.json']);
+                    webpackProc.stdout.on('data', (data) => {
+                        console.clear();
+                        write(data.toString());
+                    });
+
+                    webpackProc.stderr.on('data', (data) => {
+                        console.clear();
+                        write(data.toString());
+                    });
 
                 }
                 else if (input === ANALYZE_KEY) {
-
+                    console.clear();
+                    const bundleAnalyzer = require('webpack-bundle-analyzer');
+                    const fs = require('fs');
+                    const file = JSON.parse(fs.readFileSync('./stats.json', 'utf8'));
+                    bundleAnalyzer.start(file);
                 }
                 else if (input === FILTER_KEY) {
 
                 } else if (input === PAUSE_KEY) {
-
+                    webpackProc.kill('SIGSTOP');
+                } else if (input === CONTINUE_KEY) {
+                    webpackProc.kill('SIGCONT');
                 }
             }
         })
