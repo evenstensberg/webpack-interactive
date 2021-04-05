@@ -1,1 +1,0 @@
-const moduleRequire = require('./plugin');
