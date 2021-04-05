@@ -1,5 +1,6 @@
 # webpack interactive
 
+![demo](./webpack-demo.png)
 
 ## Installation
 
@@ -11,3 +12,4 @@ $ npm install -g webpack-interactive
 ```sh
 $ cd <root-folder> && webpack-interactive
 ```
+
