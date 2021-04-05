@@ -55,21 +55,11 @@ const Counter = () => {
             console.clear();
             process.exit(0);
 		}
-
-		if (key.downArrow) {
-			// Left arrow key pressed
-            const newState = state.index === 4 ? 0 : state.index + 1;
-            setState({
-                index: newState
-            })
-		}
-        if (key.upArrow) {
-			// Left arrow key pressed
-            const newState = state.index === 0 ? 4 : state.index - 1;
-            setState({
-                index: newState
-            })
-		}
+        interactiveConfig.forEach(prop => {
+            if(prop.key === input) {
+                console.log("HEY")
+            }
+        })
 	});
 
     return (
